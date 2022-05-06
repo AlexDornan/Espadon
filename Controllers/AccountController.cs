@@ -20,8 +20,8 @@ namespace Espadon.Controllers
 
         [HttpGet]
         public IActionResult Register() => View();
-        [HttpPost]
 
+        [HttpPost]
         public async Task<IActionResult> Register(string username, string password)
         {
             var user = new User
@@ -43,8 +43,8 @@ namespace Espadon.Controllers
 
         [HttpGet]
         public IActionResult Login() => View();
-        [HttpPost]
 
+        [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
             var user = await _userManager.FindByNameAsync(username);

@@ -10,9 +10,9 @@ namespace Espadon.Infrastructure.Respository
 {
     public class ChatRepository : IChatRepository
     {
-        private AppDbContext _ctx;
+        private AppDbContext _context;
 
-        public ChatRepository(AppDbContext ctx) => _ctx = ctx;
+        public ChatRepository(AppDbContext context) => _context = context;
 
         public async Task<Message> CreateMessage(int chatId, string message, string userId)
         {
@@ -24,8 +24,8 @@ namespace Espadon.Infrastructure.Respository
                 Timestamp = DateTime.Now
             };
 
-            _ctx.Messages.Add(Message);
-            await _ctx.SaveChangesAsync();
+            _context.Messages.Add(Message);
+            await _context.SaveChangesAsync();
 
             return Message;
         }
@@ -47,9 +47,9 @@ namespace Espadon.Infrastructure.Respository
                 UserId = rootId
             });
 
-            _ctx.Chats.Add(chat);
+            _context.Chats.Add(chat);
 
-            await _ctx.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return chat.Id;
         }
@@ -68,21 +68,21 @@ namespace Espadon.Infrastructure.Respository
                 Role = UserRole.Admin
             });
 
-            _ctx.Chats.Add(chat);
+            _context.Chats.Add(chat);
 
-            await _ctx.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public Chat GetChat(int id)
         {
-            return _ctx.Chats
+            return _context.Chats
                 .Include(x => x.Messages)
                 .FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<Chat> GetChats(string userId)
         {
-            return _ctx.Chats
+            return _context.Chats
                 .Include(x => x.Users)
                 .Where(x => !x.Users
                     .Any(y => y.UserId == userId))
@@ -91,7 +91,7 @@ namespace Espadon.Infrastructure.Respository
 
         public IEnumerable<Chat> GetPrivateChats(string userId)
         {
-            return _ctx.Chats
+            return _context.Chats
                    .Include(x => x.Users)
                        .ThenInclude(x => x.User)
                    .Where(x => x.Type == ChatType.Private
@@ -109,9 +109,9 @@ namespace Espadon.Infrastructure.Respository
                 Role = UserRole.Member
             };
 
-            _ctx.ChatUsers.Add(chatUser);
+            _context.ChatUsers.Add(chatUser);
 
-            await _ctx.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Espadon.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Espadon.Hubs
 {
     public class ChatHub : Hub
     {
+        public async Task SendMessage(Message message)
+        {
+            await Clients.All.SendAsync("receiveMessage", message);
+        }
+            
         public Task JoinRoom(string roomId)
         {
             return Groups.AddToGroupAsync(Context.ConnectionId, roomId);
